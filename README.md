@@ -8,7 +8,8 @@
 - 使用Nginx作为Web服务器和前端代理
 - 集成Trojan代理服务，提供安全的代理功能
 - 包含一个精美的PDF工具网站作为伪装
-- 自动通过ACME申请和更新SSL证书
+- 自动通过ACME申请和更新SSL证书（支持FreeSSL.cn）
+- 支持DNSPod API进行DNS验证
 - 所有关键参数（域名、端口、密码等）都可配置
 
 ## 系统要求
@@ -16,6 +17,7 @@
 - 一个运行Debian/Ubuntu的服务器
 - Docker 和 Docker Compose 已安装
 - 一个指向服务器IP的域名
+- DNSPod账号（用于DNS验证）
 
 ## 安装步骤
 
@@ -28,7 +30,14 @@ cd nginx-trojan-docker
 
 ### 2. 配置参数
 
-编辑`.env`文件，设置以下参数：
+复制环境变量示例文件并编辑：
+
+```bash
+cp .env.example .env
+nano .env
+```
+
+设置以下参数：
 
 ```bash
 # 基本设置
@@ -41,8 +50,18 @@ HTTPS_PORT=443
 
 # Trojan设置
 TROJAN_PASSWORD=你的强密码
-TROJAN_REMOTE_ADDR=127.0.0.1
+TROJAN_REMOTE_ADDR=nginx
 TROJAN_REMOTE_PORT=80
+
+# DNSPod API凭证
+DP_Id=你的DNSPod_ID
+DP_Key=你的DNSPod_Key
+
+# ACME设置
+ACME_SERVER=https://acme.freessl.cn/v2/DV90/directory/你的token
+
+# 时区
+TZ=UTC
 ```
 
 ### 3. 申请SSL证书
@@ -50,6 +69,7 @@ TROJAN_REMOTE_PORT=80
 运行初始化证书脚本：
 
 ```bash
+chmod +x init-cert.sh
 ./init-cert.sh
 ```
 
@@ -58,6 +78,7 @@ TROJAN_REMOTE_PORT=80
 ### 4. 启动服务
 
 ```bash
+chmod +x start.sh
 ./start.sh
 ```
 
@@ -109,7 +130,7 @@ TROJAN_REMOTE_PORT=80
 证书会通过ACME容器自动更新。如果需要手动更新，可以运行：
 
 ```bash
-docker-compose run --rm acme --renew -d $DOMAIN --force
+docker-compose run --rm acme --renew -d $DOMAIN --dns dns_dp --server $ACME_SERVER --force
 ```
 
 ## 目录结构
@@ -117,16 +138,20 @@ docker-compose run --rm acme --renew -d $DOMAIN --force
 ```
 nginx-trojan-docker/
 ├── acme/                   # ACME客户端数据目录
+├── acme.sh/                # ACME.sh证书存储目录
 ├── conf.d/                 # Nginx配置文件
-│   └── default.conf        # 网站和代理配置
+│   └── default.conf        # 网站配置
 ├── nginx/                  # Nginx主配置
 │   └── nginx.conf          # Nginx主配置文件
 ├── ssl/                    # SSL证书存储
 ├── trojan/                 # Trojan配置
-│   └── config.json         # Trojan配置文件
+│   ├── config.json         # Trojan配置文件
+│   ├── config.json.template # Trojan配置模板
+│   └── start-trojan.sh     # Trojan启动脚本
 ├── website/                # 伪装网站文件
 │   └── index.html          # PDF工具网站HTML
 ├── .env                    # 环境变量配置
+├── .env.example            # 环境变量示例
 ├── docker-compose.yml      # Docker Compose配置
 ├── init-cert.sh            # 证书初始化脚本
 ├── start.sh                # 服务启动脚本
@@ -138,6 +163,7 @@ nginx-trojan-docker/
 - 请务必修改默认的Trojan密码
 - 建议定期更换Trojan密码以提高安全性
 - 确保服务器防火墙只开放80和443端口
+- 保护好你的DNSPod API凭证
 
 ## 故障排除
 
@@ -148,6 +174,18 @@ docker-compose logs nginx
 docker-compose logs trojan
 docker-compose logs acme
 ```
+
+### 常见问题
+
+1. **证书申请失败**：
+   - 检查DNSPod API凭证是否正确
+   - 确认域名解析是否正确指向服务器IP
+   - 检查ACME_SERVER URL是否有效
+
+2. **Trojan连接失败**：
+   - 确认SSL证书是否正确安装
+   - 检查Trojan密码配置
+   - 确认防火墙是否开放443端口
 
 ## 许可证
 

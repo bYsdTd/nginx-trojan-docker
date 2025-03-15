@@ -2,15 +2,15 @@
     "run_type": "server",
     "local_addr": "0.0.0.0",
     "local_port": 443,
-    "remote_addr": "127.0.0.1",
-    "remote_port": 80,
+    "remote_addr": "${TROJAN_REMOTE_ADDR}",
+    "remote_port": ${TROJAN_REMOTE_PORT},
     "password": [
         "${TROJAN_PASSWORD}"
     ],
     "log_level": 1,
     "ssl": {
-        "cert": "/etc/trojan/ssl/cert.pem",
-        "key": "/etc/trojan/ssl/key.pem",
+        "cert": "/ssl/cert.pem",
+        "key": "/ssl/key.pem",
         "key_password": "",
         "cipher": "ECDHE-ECDSA-AES128-GCM-SHA256:ECDHE-RSA-AES128-GCM-SHA256:ECDHE-ECDSA-AES256-GCM-SHA384:ECDHE-RSA-AES256-GCM-SHA384:ECDHE-ECDSA-CHACHA20-POLY1305:ECDHE-RSA-CHACHA20-POLY1305:DHE-RSA-AES128-GCM-SHA256:DHE-RSA-AES256-GCM-SHA384",
         "cipher_tls13": "TLS_AES_128_GCM_SHA256:TLS_CHACHA20_POLY1305_SHA256:TLS_AES_256_GCM_SHA384",

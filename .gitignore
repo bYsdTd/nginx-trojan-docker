@@ -8,6 +8,9 @@ ssl/*.csr
 acme.sh/*
 !acme.sh/.gitkeep
 
+# Trojan configuration with sensitive data
+trojan/config.json
+
 # ACME.sh generated files
 acme/*
 !acme/.gitkeep

@@ -7,7 +7,6 @@ services:
     restart: always
     ports:
       - "${HTTP_PORT:-80}:80"
-      - "${HTTPS_PORT:-443}:443"
     volumes:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./conf.d:/etc/nginx/conf.d:ro
@@ -18,33 +17,39 @@ services:
       - TZ=UTC
     networks:
       - proxy-network
-    depends_on:
-      - trojan
-
-  trojan:
-    image: teddysun/trojan
-    container_name: trojan
-    restart: always
-    volumes:
-      - ./trojan/config.json:/etc/trojan/config.json:ro
-      - ./ssl:/etc/trojan/ssl:ro
-    environment:
-      - TZ=UTC
-    networks:
-      - proxy-network
 
   acme:
     image: neilpang/acme.sh
     container_name: acme
-    restart: always
     volumes:
       - ./acme:/acme
       - ./ssl:/ssl
+      - ./acme.sh:/acme.sh
+    environment:
+      - DP_Id=${DP_Id}
+      - DP_Key=${DP_Key}
+      - TZ=UTC
+    networks:
+      - proxy-network
+
+  trojan:
+    image: trojangfw/trojan
+    container_name: trojan
+    restart: always
+    ports:
+      - "${HTTPS_PORT:-443}:443"
+    volumes:
+      - ./trojan/config.json.template:/config/config.json.template:ro
+      - ./trojan/start-trojan.sh:/start-trojan.sh:ro
+      - ./ssl:/ssl:ro
     environment:
       - TZ=UTC
-      - DOMAIN=${DOMAIN}
-      - EMAIL=${EMAIL}
-    command: daemon
+      - TROJAN_PASSWORD=${TROJAN_PASSWORD}
+      - TROJAN_REMOTE_ADDR=${TROJAN_REMOTE_ADDR}
+      - TROJAN_REMOTE_PORT=${TROJAN_REMOTE_PORT}
+    command: /start-trojan.sh
+    networks:
+      - proxy-network
 
 networks:
   proxy-network:

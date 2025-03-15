@@ -1,0 +1,50 @@
+# SSL certificates and keys
+ssl/*.pem
+ssl/*.key
+ssl/*.crt
+ssl/*.csr
+
+# acme.sh directory (contains certificates and sensitive data)
+acme.sh/*
+!acme.sh/.gitkeep
+
+# ACME.sh generated files
+acme/*
+!acme/.gitkeep
+
+# Environment variables
+.env
+.env.*
+!.env.example
+
+# Docker volumes and data
+data/
+logs/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# Editor directories and files
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.log
+*.tmp
+tmp/
+
+# Node modules (if any frontend code exists)
+node_modules/
+npm-debug.log
+
+# Build artifacts
+dist/
+build/
+
+# Backup files
+*.bak
+*.backup 

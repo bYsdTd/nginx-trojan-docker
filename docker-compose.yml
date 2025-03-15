@@ -40,14 +40,14 @@ services:
       - "${HTTPS_PORT:-443}:443"
     volumes:
       - ./trojan/config.json.template:/config/config.json.template:ro
-      - ./trojan/start-trojan.sh:/start-trojan.sh:ro
+      - ./trojan/start-trojan.sh:/start-trojan.sh
       - ./ssl:/ssl:ro
     environment:
       - TZ=UTC
       - TROJAN_PASSWORD=${TROJAN_PASSWORD}
       - TROJAN_REMOTE_ADDR=${TROJAN_REMOTE_ADDR}
       - TROJAN_REMOTE_PORT=${TROJAN_REMOTE_PORT}
-    command: /start-trojan.sh
+    command: sh -c "chmod +x /start-trojan.sh && /start-trojan.sh"
     networks:
       - proxy-network
 

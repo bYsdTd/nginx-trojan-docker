@@ -133,6 +133,11 @@ chmod +x start.sh
 docker-compose run --rm acme --renew -d $DOMAIN --dns dns_dp --server $ACME_SERVER --force
 ```
 
+查看证书更新状态
+```bash
+docker-compose run --rm acme --list
+```
+
 ## 目录结构
 
 ```

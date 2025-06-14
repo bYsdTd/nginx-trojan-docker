@@ -131,6 +131,10 @@ chmod +x start.sh
 
 ```bash
 ./init-cert.sh
+
+# 重启服务
+docker-compose down
+docker-compose up -d
 ```
 
 查看证书更新状态

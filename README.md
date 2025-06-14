@@ -127,10 +127,10 @@ chmod +x start.sh
 
 ## 更新SSL证书
 
-证书会通过ACME容器自动更新。如果需要手动更新，可以运行：
+手动更新，可以运行：
 
 ```bash
-docker-compose run --rm acme --renew -d $DOMAIN --dns dns_dp --server $ACME_SERVER --force
+./init-cert.sh
 ```
 
 查看证书更新状态

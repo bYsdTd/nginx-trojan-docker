@@ -88,7 +88,7 @@ chmod +x start.sh
 - **Trojan代理**: 在客户端配置中使用`你的域名.com:443`作为服务器地址，密码为你在`.env`中设置的`TROJAN_PASSWORD`
 
 ### 5. 配置证书更新定时任务
-示例如下：
+示例如下，注意用 date -R 查看当前服务的UTC时间：
 ```bash
 45 15 * * * cd /root/projects/nginx-trojan-docker && ./init-cert.sh >> /var/log/init-cert.log 2>&1 && docker-compose down >> /var/log/init-cert.log 2>&1 && docker-compose up -d >> /var/log/init-cert.log 2>&1
 ```

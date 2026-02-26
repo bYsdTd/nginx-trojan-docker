@@ -26,9 +26,16 @@ services:
       - ./ssl:/ssl
       - ./acme.sh:/acme.sh
     environment:
+      - ACME_SERVER=${ACME_SERVER}
+      - EMAIL=${EMAIL}
+      - DOMAIN=${DOMAIN}
       - DP_Id=${DP_Id}
       - DP_Key=${DP_Key}
       - TZ=UTC
+      - SPACESHIP_API_KEY=${SPACESHIP_API_KEY}
+      - SPACESHIP_API_SECRET=${SPACESHIP_API_SECRET}
+    env_file:
+      - .env
     networks:
       - proxy-network
 

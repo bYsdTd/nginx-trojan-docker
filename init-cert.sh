@@ -34,7 +34,7 @@ WWW_DOMAIN="www.$DOMAIN"
 
 # Initialize certificate using FreeSSL.cn
 echo "Initializing SSL certificate for $DOMAIN and $WWW_DOMAIN using FreeSSL.cn..."
-docker-compose run --rm acme --issue -d $DOMAIN -d $WWW_DOMAIN --dns dns_dp --server $ACME_SERVER --email $EMAIL --force
+docker-compose run --rm acme --issue -d $DOMAIN -d $WWW_DOMAIN --server $ACME_SERVER --email $EMAIL --dns dns_spaceship --keylength ec-256 --force
 
 # Check if certificate files exist in the acme.sh directory
 if [ -d "acme.sh/${DOMAIN}_ecc" ]; then

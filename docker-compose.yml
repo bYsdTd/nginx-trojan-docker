@@ -17,7 +17,8 @@ services:
       - TZ=UTC
     networks:
       - proxy-network
-
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
   acme:
     image: neilpang/acme.sh
     container_name: acme

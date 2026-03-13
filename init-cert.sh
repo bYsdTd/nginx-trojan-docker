@@ -30,7 +30,7 @@ if [ -z "$ACME_SERVER" ]; then
 fi
 
 # Set WWW subdomain
-WWW_DOMAIN="www.$DOMAIN"
+WWW_DOMAIN="*.$DOMAIN"
 
 # Initialize certificate using FreeSSL.cn
 echo "Initializing SSL certificate for $DOMAIN and $WWW_DOMAIN using FreeSSL.cn..."
